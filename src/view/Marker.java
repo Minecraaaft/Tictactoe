@@ -34,10 +34,6 @@ public class Marker {
         }
     }
 
-    public String[][] getStage() {
-        return stage;
-    }
-
     public boolean isNewlyAddedMarker() {
         return newlyAddedMarker;
     }
