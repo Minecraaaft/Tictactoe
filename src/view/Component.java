@@ -15,7 +15,6 @@ public class Component extends Applet implements Runnable {
     private Dimension size = new Dimension(700, 560);
     private Dimension pixel = new Dimension(size.width / pixelSize, size.height / pixelSize);
     private Image screen;
-    private Graphics graphics;
 
     private Level level = new Level();
     private Marker marker = new Marker();
@@ -51,6 +50,7 @@ public class Component extends Applet implements Runnable {
 
     public void tick() {
 
+        // puts a marker on the square that the use clicks on
         if (listener.getClickedLocation().x > 14 && listener.getClickedLocation().x < 223 && listener.getClickedLocation().y > 12 && listener.getClickedLocation().y < 176) {
             marker.addMarker(0, 0, logic.currentPlayer());
         } else if (listener.getClickedLocation().x > 238 && listener.getClickedLocation().x < 460 && listener.getClickedLocation().y > 12 && listener.getClickedLocation().y < 176) {
@@ -78,7 +78,6 @@ public class Component extends Applet implements Runnable {
         if (marker.isNewlyAddedMarker()) {
              if (logic.checkWin(marker.getStage())) {
                  gameEnded = true;
-                 System.out.println(logic.currentPlayer() + " has won");
              } else {
                  logic.nextPlayer();
              }
@@ -86,10 +85,8 @@ public class Component extends Applet implements Runnable {
     }
 
     public void render() {
-        graphics = screen.getGraphics();
+        Graphics graphics = screen.getGraphics();
 
-        graphics.setColor(new Color(76, 180, 255));
-        graphics.fillRect(0,0, pixel.width, pixel.height);
         level.render(graphics,size.width / pixelSize,size.height/ pixelSize, gameEnded);
         marker.render(graphics, gameEnded);
 
@@ -97,24 +94,18 @@ public class Component extends Applet implements Runnable {
 
         graphics.drawImage(screen, 0,0, 1000, 1400, 0, 0, 500, 700, null);
         graphics.dispose();
-
     }
 
     @Override
     public void run() {
         screen = createVolatileImage(pixel.width, pixel.height);
         while (true) {
-
             tick();
             render();
 
             try {
-
                 Thread.sleep(5);
             } catch (Exception e) { }
-
         }
-
-
     }
 }
